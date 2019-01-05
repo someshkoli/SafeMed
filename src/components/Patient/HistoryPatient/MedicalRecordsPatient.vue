@@ -1,25 +1,27 @@
 <template>
   <v-container>
     <v-timeline dense class="pb-4">
-      <v-timeline-item v-for="y in 4" :key="y" color="teal lighten--1" fill-dot right>
+      <v-timeline-item
+        v-for="(y, index2) in records"
+        :key="index2"
+        color="teal lighten--1"
+        fill-dot
+        right
+      >
         <v-card>
           <v-card-title class="teal lighten--1">
-            <v-layout row>
+            <v-layout column>
               <v-flex xs6 justify-end align-end>
-                <h2 class="display-1 white--text">B. R. Batra</h2>
-              </v-flex>
-              <v-flex xs6>
-                <h2 class="display-0.5 white--text font-weight-light">B. R. Batra</h2>
+                <h2 class="display-1 white--text">{{ y[0] }}</h2>
               </v-flex>
             </v-layout>
           </v-card-title>
           <v-container>
-            <v-layout>
-              <v-flex
-                v-for="n in 3"
-                :key="n"
-                xs4
-              >Lorem ipsum dolor sit amet, no nam oblique veritus no nam oblique.</v-flex>
+            <v-layout column>
+              <v-flex v-for="(n, index) in y[index2]" :key="index" xs4>
+                <div v-if="index == 3">{{ Date(y[index]) }}</div>
+                <div v-else>{{ y[index] }}</div>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-card>
@@ -29,24 +31,34 @@
 </template>
 
 <script>
-import web3 from "/home/regalstreak/development/web/safemed/safemed/src/util/getWeb3.js";
-import factory from "/home/regalstreak/development/web/safemed/safemed/src/util/factory.js";
+import patient from "/home/regalstreak/development/web/safemed/safemed/src/util/patient.js";
+import web3 from "/home/regalstreak/development/web/safemed/safemed/src/util/getWeb3";
 export default {
   async mounted() {
+    console.log(this.contractAddress);
+    let patientIn = patient(this.contractAddress);
     let accounts = await web3.eth.getAccounts();
-    let patientAddress = await factory.methods._patientMapping(accounts[0]);
-    console.log(patientAddress);
+    let numberofRec = await patientIn.methods._totalRecords().call();
+    let returned;
+    for (let i = numberofRec - 1; i >= 0; i--) {
+      returned = await patientIn.methods.get_record(i).call({
+        from: accounts[0]
+      });
+      this.records.push(returned);
+    }
+    console.log("sadasdasdsaad");
+    console.log(this.records);
+
+    // doctorsName: "",
+    // hospital: "",
+    // diagnose: "",
+    // time: "",
+    // dateIn: "",
+    // dateOut: ""
   },
   data() {
     return {
-      records: {
-        doctorsName: "",
-        hospital: "",
-        diagnose: "",
-        time: "",
-        dateIn: "",
-        dateOut: ""
-      }
+      records: []
     };
   },
   computed: {
