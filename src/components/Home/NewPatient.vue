@@ -8,7 +8,7 @@
 
           <v-text-field solo type="string" v-model="name" label="Name" required></v-text-field>
 
-          <button @click="submitShit">Submit</button>
+          <v-btn @click="submitShit">Submit</v-btn>
       </v-flex>
     </v-layout>
   </v-container>

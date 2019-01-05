@@ -1,79 +1,58 @@
 <template>
-  <v-container>
-    <v-layout column>
-      <router-link to="/search">
-        <v-text-field readonly label="Search" solo append-icon="search"></v-text-field>
-      </router-link>
+  <v-card height="200px" flat>
+    <div class="headline text-xs-center pa-5">Active: {{ bottomNav }}</div>
+    <v-bottom-nav :active.sync="bottomNav" :value="true" fixed color="transparent">
+      <v-btn color="teal" @click="homeClicked" flat value="home">
+        <span>Home</span>
+        <v-icon>home</v-icon>
+      </v-btn>
 
-      <v-carousel height="200" hide-delimiters>
-        <v-carousel-item
-          v-for="(item,i) in items"
-          :key="i"
-          :src="item.src"
-          reverse-transition="slide-x-transition"
-          transition="slide-x-transition"
-        ></v-carousel-item>
-      </v-carousel>
+      <v-btn color="teal" @click="qrClicked" flat value="QR">
+        <span>QR</span>
+        <v-icon>texture</v-icon>
+      </v-btn>
 
-      <v-card class="recommendations my-3">
-        <h1 style="color: white;" class="text-xs-center py-5">Recommendations</h1>
-      </v-card>
+      <v-btn color="teal" @click="historyClicked" flat value="history">
+        <span>History</span>
+        <v-icon>history</v-icon>
+      </v-btn>
 
-      <v-card class="categoriesHeader mb-3">
-        <h2 style="color: white;" class="text-xs-center py-3">Browse by category:</h2>
-      </v-card>
-
-      <v-layout>
-          <v-layout row wrap>
-            <v-flex v-for="n in 9" :key="n" xs6>
-              <v-card flat tile class="pa-1">
-                <v-img
-                  :src="`https://unsplash.it/150/300?image=${Math.floor(Math.random() * 100) + 1}`"
-                  height="230px"
-                ></v-img>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-layout>
-    </v-layout>
-  </v-container>
+      <v-btn color="teal" @click="accountClicked" flat value="account">
+        <span>Account</span>
+        <v-icon>person</v-icon>
+      </v-btn>
+    </v-bottom-nav>
+  </v-card>
 </template>
 
 <script>
+import store from "../../../store.js";
 export default {
-  data() {
-    return {
-      items: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
-        }
-      ]
-    };
+  methods: {
+    homeClicked() {
+      this.$store.commit("changeBottomNavState", "home");
+      this.$router.push("/patient");
+    },
+    qrClicked() {
+      this.$store.commit("changeBottomNavState", "QR");
+      this.$router.push("/patient/qr");
+    },
+    historyClicked() {
+      this.$store.commit("changeBottomNavState", "history");
+      this.$router.push("/patient/history");
+    },
+    accountClicked() {
+      this.$store.commit("changeBottomNavState", "account");
+      this.$router.push("/patient/account");
+    }
+  },
+  computed: {
+    bottomNav() {
+      return store.getters.bottomNavState;
+    }
   }
 };
 </script>
 
-<style scoped>
-.test {
-  background-color: black;
-}
-
-.recommendations {
-  background-color: black;
-  height: 20vh;
-}
-
-.categoriesHeader {
-  background-color: black;
-  height: 8vh;
-}
+<style>
 </style>
