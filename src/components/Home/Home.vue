@@ -15,16 +15,14 @@
 </template>
 
 <script>
-import getWeb3 from "../../util/getWeb3";
+import web3 from "../../util/getWeb3";
 import ourInstance from "../../util/factory.js";
 export default {
-  data() {},
   methods: {},
   mounted() {
     async () => {
       try {
         // Get network provider and web3 instance.
-        const web3 = await getWeb3();
 
         // Use web3 to get the user's accounts.
         const accounts = await web3.eth.getAccounts();

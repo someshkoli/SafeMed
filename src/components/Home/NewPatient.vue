@@ -6,90 +6,37 @@
         <br>
         <br>
 
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-text-field solo v-model="name" :counter="10" :rules="nameRules" label="Name" required></v-text-field>
+          <v-text-field solo type="string" v-model="name" label="Name" required></v-text-field>
 
-          <v-menu
-            solo
-            ref="menu"
-            :close-on-content-click="false"
-            v-model="menu"
-            :nudge-right="40"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
-            <v-text-field
-              solo
-              slot="activator"
-              v-model="date"
-              label="Birthday date"
-              append-icon="event"
-              readonly
-            ></v-text-field>
-            <v-date-picker
-              ref="picker"
-              v-model="date"
-              :max="new Date().toISOString().substr(0, 10)"
-              min="1950-01-01"
-              @change="save"
-            ></v-date-picker>
-          </v-menu>
-
-          <v-checkbox
-            solo
-            v-model="checkbox"
-            :rules="[v => !!v || 'You must agree to continue!']"
-            label="Do you agree?"
-            required
-          ></v-checkbox>
-
-          <v-btn :disabled="!valid" color="success" @click="validate">Validate</v-btn>
-
-          <v-btn color="error" @click="reset">Reset Form</v-btn>
-
-          <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
-        </v-form>
+          <button @click="submitShit">Submit</button>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import Factory from "../../util/factory.js"
+import web3 from '../../util/getWeb3'
 export default {
-  data: () => ({
-    valid: true,
-    name: "",
-    nameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.length <= 10) || "Name must be less than 10 characters"
-    ],
-    checkbox: false,
-    date: null,
-    menu: false
-  }),
-
-  methods: {
-    save(date) {
-      this.$refs.menu.save(date);
-    },
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true;
-      }
-    },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
+  data: function() {
+    return {
+      name: ""
     }
   },
-  watch: {
-    menu(val) {
-      val && this.$nextTick(() => (this.$refs.picker.activePicker = "YEAR"));
+  methods: {
+      async submitShit() {
+      console.log("sadasd");
+      let accounts = await web3.eth.getAccounts();
+      console.log("sadasd");
+      let ourName = this.name;
+      console.log(ourName);
+      await Factory.methods.createPatient(ourName, '051012').send({
+        from: accounts[0],
+        gasLimit: '4700000'
+      })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+      console.log(ourName)
     }
   }
 };
