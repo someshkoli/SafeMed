@@ -1,7 +1,7 @@
 <template>
   <v-card height="200px" flat>
     <div class="headline text-xs-center pa-5">Active: {{ bottomNav }}</div>
-    <v-bottom-nav :active.sync="bottomNav" :value="true" fixed color="transparent">
+    <v-bottom-nav :active.sync="bottomNav" :value="true" fixed>
       <v-btn color="teal" @click="homeClicked" flat value="home">
         <span>Home</span>
         <v-icon>home</v-icon>
@@ -47,8 +47,13 @@ export default {
     }
   },
   computed: {
-    bottomNav() {
-      return store.getters.bottomNavState;
+    bottomNav: {
+      get() {
+        return store.getters.bottomNavState;
+      },
+      set() {
+        
+      }
     }
   }
 };

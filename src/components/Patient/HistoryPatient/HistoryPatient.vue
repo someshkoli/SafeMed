@@ -1,7 +1,35 @@
 <template>
-  <v-card height="200px" flat>
-    <div class="headline text-xs-center pa-5">Active: {{ bottomNav }}</div>
-    <v-bottom-nav :active.sync="bottomNav" :value="true" fixed color="transparent">
+  <div>
+    <div>
+      <v-toolbar color="teal" dark tabs class="pt-2">
+        <v-text-field
+          append-icon="mic"
+          class="mx-3"
+          flat
+          label="Search"
+          prepend-inner-icon="search"
+          solo-inverted
+        ></v-text-field>
+
+        <v-tabs grow slot="extension" v-model="tabs" centered color="transparent" slider-color="white">
+          <v-tab>Medical Records</v-tab>
+          <v-tab>Uploaded Files</v-tab>
+        </v-tabs>
+      </v-toolbar>
+
+      <v-tabs-items v-model="tabs">
+        <v-tab-item>
+          <medical-records-patient></medical-records-patient>
+        </v-tab-item>
+        <v-tab-item>
+          <v-card>
+            <v-card-text>{{ text }}</v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
+
+    <v-bottom-nav :active.sync="bottomNav" :value="true" fixed >
       <v-btn color="teal" @click="homeClicked" flat value="home">
         <span>Home</span>
         <v-icon>home</v-icon>
@@ -22,12 +50,25 @@
         <v-icon>person</v-icon>
       </v-btn>
     </v-bottom-nav>
-  </v-card>
+  </div>
 </template>
 
 <script>
 import store from "../../../store.js";
+import MedicalRecordsPatient from "./MedicalRecordsPatient"
 export default {
+  data() {
+    return {
+      tabs: null,
+      text:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    };
+  },
+
+  components: {
+    "medical-records-patient": MedicalRecordsPatient
+  },
+
   methods: {
     homeClicked() {
       this.$store.commit("changeBottomNavState", "home");
@@ -47,8 +88,11 @@ export default {
     }
   },
   computed: {
-    bottomNav() {
-      return store.getters.bottomNavState;
+    bottomNav: {
+      get() {
+        return store.getters.bottomNavState;
+      },
+      set() {}
     }
   }
 };

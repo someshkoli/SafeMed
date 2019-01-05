@@ -33,8 +33,10 @@ export default {
           from: accounts[0]
         });
         console.log("Succ")
+        this.$router.push("/patient")
       } catch (err) {
         console.log(err);
+        alert("Error something ")
       }
       console.log(contractAddress);
     }
