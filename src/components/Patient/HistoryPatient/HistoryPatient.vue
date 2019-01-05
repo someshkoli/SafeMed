@@ -13,7 +13,7 @@
 
         <v-tabs grow slot="extension" v-model="tabs" centered color="transparent" slider-color="white">
           <v-tab>Medical Records</v-tab>
-          <v-tab>Uploaded Files</v-tab>
+          <v-tab>uploadeded Files</v-tab>
         </v-tabs>
       </v-toolbar>
 
@@ -22,9 +22,7 @@
           <medical-records-patient></medical-records-patient>
         </v-tab-item>
         <v-tab-item>
-          <v-card>
-            <v-card-text>{{ text }}</v-card-text>
-          </v-card>
+          <uploaded-files-patient></uploaded-files-patient>
         </v-tab-item>
       </v-tabs-items>
     </div>
@@ -56,6 +54,7 @@
 <script>
 import store from "../../../store.js";
 import MedicalRecordsPatient from "./MedicalRecordsPatient"
+import UploadedFilesPatient from "./UploadedFilesPatient"
 export default {
   data() {
     return {
@@ -66,7 +65,8 @@ export default {
   },
 
   components: {
-    "medical-records-patient": MedicalRecordsPatient
+    "medical-records-patient": MedicalRecordsPatient,
+    "uploaded-files-patient": UploadedFilesPatient
   },
 
   methods: {

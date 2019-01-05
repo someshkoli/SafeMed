@@ -18,51 +18,66 @@
 import web3 from "../../util/getWeb3";
 import factory from "../../util/factory.js";
 export default {
-  
   methods: {
     async login() {
       let accounts = await web3.eth.getAccounts();
       console.log(accounts);
-      // if (factory.methods.login) {
-      //   alert("user not present please register");
-      // } else {
-      //   this.$router.push("/patients");
-      //   console.log("Some shit not working lmao f");
-      // }
-      try {
-        var contractAddress = await factory.methods._patientsMapping(accounts[0]).call();
-        console.log(contractAddress);
+      let contractAddress;
+      if (
+        (await factory.methods._patientsMapping(accounts[0]).call()) !=
+        0x0000000000000000000000000000000000000000
+      ) {
+        console.log("patient");
+        contractAddress = await factory.methods
+          ._patientsMapping(accounts[0])
+          .call();
         this.$store.commit("changeContractAddressState", contractAddress);
-        console.log("Succ")
-        this.$router.push("/patient")
-      } catch (err) {
-        console.log(err);
-        alert("Error something ")
+        this.$router.push("/patient");
+        return;
+      } else if (
+        (await factory.methods._doctorMapping(accounts[0]).call()) !=
+        0x0000000000000000000000000000000000000000
+      ) {
+        console.log("doctor");
+        contractAddress = await factory.methods
+          ._doctorMapping(accounts[0])
+          .call();
+        this.$store.commit("changeContractAddressState", contractAddress);
+        this.$router.push("/doctor");
+        return ;
+      } else {
+        console.log("bhosdika");
       }
+
+      console.log(contractAddress);
+      console.log(accounts);
+      this.$store.commit("changeContractAddressState", contractAddress);
+      console.log("Succ");
+      this.$router.push("/patient");
+    },
+    mounted() {
+      async () => {
+        try {
+          // Get network provider and web3 instance.
+
+          // Use web3 to get the user's accounts.
+          const accounts = await web3.eth.getAccounts();
+          // For debugging purposes
+          console.log(accounts);
+
+          // Set web3, accounts, and contract to the state, and then proceed with an
+          // example of interacting with the contract's methods.
+          this.setState({ web3, account: accounts[0], contract: factory });
+          this.runExample();
+        } catch (error) {
+          // Catch any errors for any of the above operations.
+          console.log(
+            "Failed to load web3, accounts, or contract. Check console for details."
+          );
+          console.error(error);
+        }
+      };
     }
-  },
-  mounted() {
-    async () => {
-      try {
-        // Get network provider and web3 instance.
-
-        // Use web3 to get the user's accounts.
-        const accounts = await web3.eth.getAccounts();
-        // For debugging purposes
-        console.log(accounts);
-
-        // Set web3, accounts, and contract to the state, and then proceed with an
-        // example of interacting with the contract's methods.
-        this.setState({ web3, account: accounts[0], contract: factory });
-        this.runExample();
-      } catch (error) {
-        // Catch any errors for any of the above operations.
-        console.log(
-          "Failed to load web3, accounts, or contract. Check console for details."
-        );
-        console.error(error);
-      }
-    };
   }
 };
 </script>
