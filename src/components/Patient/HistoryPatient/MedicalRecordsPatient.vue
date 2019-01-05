@@ -29,7 +29,14 @@
 </template>
 
 <script>
+import web3 from "/home/regalstreak/development/web/safemed/safemed/src/util/getWeb3.js";
+import factory from "/home/regalstreak/development/web/safemed/safemed/src/util/factory.js";
 export default {
+  async mounted() {
+    let accounts = await web3.eth.getAccounts();
+    let patientAddress = await factory.methods._patientMapping(accounts[0]);
+    console.log(patientAddress);
+  },
   data() {
     return {
       records: {
@@ -41,6 +48,15 @@ export default {
         dateOut: ""
       }
     };
+  },
+  computed: {
+    contractAddress: {
+      get() {
+        return this.$store.getters.contractAddressState;
+      },
+
+      set() {}
+    }
   }
 };
 </script>

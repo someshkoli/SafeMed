@@ -18,6 +18,7 @@
 import web3 from "../../util/getWeb3";
 import factory from "../../util/factory.js";
 export default {
+  
   methods: {
     async login() {
       let accounts = await web3.eth.getAccounts();
@@ -29,16 +30,15 @@ export default {
       //   console.log("Some shit not working lmao f");
       // }
       try {
-        var contractAddress = await factory.methods.login().call({
-          from: accounts[0]
-        });
+        var contractAddress = await factory.methods._patientsMapping(accounts[0]).call();
+        console.log(contractAddress);
+        this.$store.commit("changeContractAddressState", contractAddress);
         console.log("Succ")
         this.$router.push("/patient")
       } catch (err) {
         console.log(err);
         alert("Error something ")
       }
-      console.log(contractAddress);
     }
   },
   mounted() {

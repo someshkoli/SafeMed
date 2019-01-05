@@ -1,18 +1,15 @@
 pragma solidity 0.4.25;
 
 contract Factory{
-    mapping(address=>address) private _contracts;
+    mapping(address=>address) public _patientsMapping;
+    mapping(address=>address) public _doctorMapping;
     function createPatient(string _name, string _dob) public returns(address){
         address _new_patient = new Patient(_name, _dob ,msg.sender);
-        _contracts[msg.sender] = _new_patient;
+        _patientsMapping[msg.sender] = _new_patient;
     }
     function createDoctor(string _docname) public {
         address _new_doctor = new Doctor(msg.sender, _docname);
-        _contracts[msg.sender] = _new_doctor;
-    }
-    function login() public view returns(address){
-        require(_contracts[msg.sender] != 0x0000000000000000000000000000000000000000);
-        return _contracts[msg.sender];
+        _doctorMapping[msg.sender] = _new_doctor;
     }
 }
 
@@ -31,17 +28,32 @@ contract Patient{
         uint _time;
     }
 
-    string public _name;
-    string public _dob;
+    string _name;
+    string _dob;
     address _patient;
     hash[] record;
     visit_record[] visit;
     mapping(address=>bool) _doctors;
+    uint public _totalRecords;
+    uint public _totalHashes;
 
-    function Patient(string name,string dob, address patient)public{
+    constructor(string name,string dob, address patient)public{
         _name=name;
         _dob=dob;
         _patient=patient;
+        _totalRecords = 0;
+        _totalHashes = 0;
+    }
+    
+    function getBasicInfo() public view returns(
+        string, string, address, uint
+        ){
+        return(
+            _name,
+            _dob,
+            _patient,
+            _totalRecords
+        );
     }
 
     function upload_doc(string name)public{
@@ -50,9 +62,10 @@ contract Patient{
             _time:now
         });
         record.push(newhash);
+        _totalHashes++;
     }
 
-    function add_record_visit(string docname,string hospital,string daignos,string datein,string dateout)public{
+    function add_record_visit(string docname,string hospital,string daignos,string datein,string dateout)public restrict_patient{
         visit_record memory newVisit=visit_record({
             _docname:docname,
             _hospital:hospital,
@@ -62,6 +75,7 @@ contract Patient{
             _time:now
         });
         visit.push(newVisit);
+        _totalRecords++;
     }
 
     function get_record(uint index)public view restrict returns(
@@ -90,6 +104,13 @@ contract Patient{
     function adddoc(address _doc)public restrict_patient{
         _doctors[_doc]=true;
     }
+    
+    function getHash(uint index) public view restrict returns (string,uint) {
+        return (
+                record[index]._name,
+                record[index]._time
+            );
+    } 
 
 }
 
