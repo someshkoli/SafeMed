@@ -1,6 +1,14 @@
 <template>
-  <v-card height="200px" flat>
-    <div class="headline text-xs-center pa-5">Active: {{ bottomNav }}</div>
+  <div>
+    <p class="error">{{ error }}</p>
+
+    <p class="decode-result">
+      Last result:
+      <b>{{ result }}</b>
+    </p>
+
+    <qrcode-stream @decode="onDecode" @init="onInit"/>
+
     <v-bottom-nav :active.sync="bottomNav" :value="true" fixed>
       <v-btn color="teal" @click="homeClicked" flat value="home">
         <span>Home</span>
@@ -22,7 +30,7 @@
         <v-icon>person</v-icon>
       </v-btn>
     </v-bottom-nav>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -51,10 +59,14 @@ export default {
       get() {
         return store.getters.bottomNavState;
       },
-      set() {
-        
-      }
+      set() {}
     }
+  },
+  data() {
+    return {
+      result: "",
+      error: ""
+    };
   }
 };
 </script>
