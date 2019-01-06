@@ -18,7 +18,7 @@
           </v-card-title>
           <v-container>
             <v-layout column>
-              <v-img :src="buffermera" aspect-ratio="1.7"></v-img>
+              <v-img :src="fetchData(y[1])" aspect-ratio="1.7"></v-img>
             </v-layout>
           </v-container>
         </v-card>
@@ -73,13 +73,14 @@ export default {
     }
   },
   methods: {
-    fetchData() {
-      fetch(`https://ipfs.io/ipfs/${this.images[0]["0"]}`).then(res => {
+    fetchData(data) {
+      fetch(`https://ipfs.io/ipfs/${data}`).then(res => {
         res.arrayBuffer().then(buffer => {
           buffer = new Uint8Array(buffer);
           this.buffermera =
             "data:image/jpeg;base64," + buffer.toString("base64");
           console.log("sp,esjlp;o");
+          return this.buffermera;
         });
       });
     }

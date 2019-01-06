@@ -35,6 +35,9 @@
 
 <script>
 import store from "../../../store.js";
+import web3 from "/home/regalstreak/development/web/safemed/safemed/src/util/getWeb3";
+import patient from "/home/regalstreak/development/web/safemed/safemed/src/util/patient.js";
+import factory from "/home/regalstreak/development/web/safemed/safemed/src/util/factory.js";
 export default {
   methods: {
     homeClicked() {
@@ -52,6 +55,49 @@ export default {
     accountClicked() {
       this.$store.commit("changeBottomNavState", "account");
       this.$router.push("/doctor/account");
+    },
+    onDecode(result) {
+      this.result = result;
+      console.log(this.result);
+      this.addInContract();
+    },
+
+    async addInContract() {
+      if (this.result != "0x0000000000000000000000000000000000000000") {
+        let result_contract = await factory.methods
+          ._patientsMapping(this.result)
+          .call();
+        // let patientInst = patient(result_contract);
+        this.login(result_contract);
+        this.result = "0x0000000000000000000000000000000000000000";
+      }
+    },
+
+    async login(add) {
+        this.contractAddress=add;
+        this.$store.commit("changeContractAddressState",this.contractAddress);
+        this.$router.push("/patient");
+        return;
+    },
+
+    async onInit(promise) {
+      try {
+        await promise;
+      } catch (error) {
+        if (error.name === "NotAllowedError") {
+          this.error = "ERROR: you need to grant camera access permisson";
+        } else if (error.name === "NotFoundError") {
+          this.error = "ERROR: no camera on this device";
+        } else if (error.name === "NotSupportedError") {
+          this.error = "ERROR: secure context required (HTTPS, localhost)";
+        } else if (error.name === "NotReadableError") {
+          this.error = "ERROR: is the camera already in use?";
+        } else if (error.name === "OverconstrainedError") {
+          this.error = "ERROR: installed cameras are not suitable";
+        } else if (error.name === "StreamApiNotSupportedError") {
+          this.error = "ERROR: Stream API is not supported in this browser";
+        }
+      }
     }
   },
   computed: {
@@ -60,7 +106,13 @@ export default {
         return store.getters.bottomNavState;
       },
       set() {}
-    }
+    },
+    contractAddress: {
+      get() {
+        return store.getters.contractAddressState;
+      },
+      set() {}
+    },
   },
   data() {
     return {
@@ -71,5 +123,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.error {
+  font-weight: bold;
+  color: red;
+}
 </style>
