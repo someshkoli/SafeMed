@@ -6,10 +6,12 @@ contract Factory{
     function createPatient(string _name, string _dob) public returns(address){
         address _new_patient = new Patient(_name, _dob ,msg.sender);
         _patientsMapping[msg.sender] = _new_patient;
+        return _new_patient;
     }
-    function createDoctor(string _docname) public {
+    function createDoctor(string _docname) public returns(address){
         address _new_doctor = new Doctor(msg.sender, _docname);
         _doctorMapping[msg.sender] = _new_doctor;
+        return _new_doctor;
     }
 }
 
@@ -118,6 +120,7 @@ contract Doctor{
     string _docname;
     address[] _patients;
     address _doctor;
+    uint public nopatients;
     constructor(address doctor, string docname)public{
         _doctor = doctor;
         _docname = docname;
@@ -125,6 +128,11 @@ contract Doctor{
 
     function addPatient(address patient_address) public {
         _patients.push(patient_address);
+        nopatients++;
+    }
+
+    function retpatients()public view returns(address[]){
+        return _patients;
     }
 
 }
