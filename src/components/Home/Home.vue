@@ -17,6 +17,7 @@
 <script>
 import web3 from "../../util/getWeb3";
 import factory from "../../util/factory.js";
+
 export default {
   methods: {
     async login() {

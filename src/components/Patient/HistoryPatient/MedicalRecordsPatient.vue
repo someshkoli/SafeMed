@@ -34,8 +34,8 @@
 import patient from "../../../util/patient";
 import web3 from "../../../util/getWeb3";
 export default {
-  async mounted() {
-    console.log(this.contractAddress);
+  async mounted() {  
+    console.log(this.contractAddress,"hello");
     let patientIn = patient(this.contractAddress);
     let accounts = await web3.eth.getAccounts();
     let numberofRec = await patientIn.methods._totalRecords().call();

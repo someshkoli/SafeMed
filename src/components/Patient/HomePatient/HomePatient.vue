@@ -157,6 +157,7 @@ export default {
     async addShit() {
       this.dialog = false;
       let accounts = await web3.eth.getAccounts();
+      console.log(accounts)
       let pinstance = await patient(this.contractAddress);
       console.log(accounts[0] === this.contractAddress);
       let ourDoc = this.doctorName;

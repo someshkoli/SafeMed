@@ -27,6 +27,7 @@ export default {
       async submitShit() {
       console.log("sadasd");
       let accounts = await web3.eth.getAccounts();
+      console.log(accounts)
       console.log("sadasd");
       let ourName = this.name;
       console.log(ourName);

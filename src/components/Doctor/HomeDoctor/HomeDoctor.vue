@@ -3,7 +3,7 @@
     <v-flex class="text-xs-center">
       <div>
         <v-btn color="secondary" dark href='http://192.168.6.132:3000' >Upload Record</v-btn>
-        <input type="file" style="display: none" ref="fileInput" @change="onFilePicked">
+        <!-- <input type="file" style="display: none" ref="fileInput" @change="onFilePicked"> -->
 
         <v-dialog v-model="dialog" persistent max-width="600px">
           <v-btn slot="activator" color="primary" dark>Open Dialog</v-btn>
