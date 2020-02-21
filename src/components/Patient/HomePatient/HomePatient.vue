@@ -113,8 +113,8 @@
 
 <script>
 import store from "../../../store.js";
-import web3 from "/home/regalstreak/development/web/safemed/safemed/src/util/getWeb3";
-import patient from "/home/regalstreak/development/web/safemed/safemed/src/util/patient.js";
+import web3 from "../../../util/getWeb3";
+import patient from "../../../util/patient";
 
 import ipfs from "./ipfs";
 export default {

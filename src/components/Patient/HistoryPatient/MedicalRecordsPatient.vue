@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import patient from "/home/regalstreak/development/web/safemed/safemed/src/util/patient.js";
-import web3 from "/home/regalstreak/development/web/safemed/safemed/src/util/getWeb3";
+import patient from "../../../util/patient";
+import web3 from "../../../util/getWeb3";
 export default {
   async mounted() {
     console.log(this.contractAddress);

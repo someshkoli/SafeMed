@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import doctor from "/home/regalstreak/development/web/safemed/safemed/src/util/doctor.js";
-import web3 from "/home/regalstreak/development/web/safemed/safemed/src/util/getWeb3";
+import doctor from "../../../util/doctor";
+import web3 from "../../../util/getWeb3";
 import patient from "../../../util/patient";
-import factory from "/home/regalstreak/development/web/safemed/safemed/src/util/factory.js";
+import factory from "../../../util/factory";
 export default {
   async mounted() {
     console.log(this.contractAddress);

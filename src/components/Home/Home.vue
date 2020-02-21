@@ -5,7 +5,7 @@
       <v-flex xs2>
         <v-layout column>
           <v-img aspect-ratio="5" :src="require('../../assets/logo.png')" class="display-2 mb-3"></v-img>
-          <v-btn to="/new-patient" color="black" dark>New Patient</v-btn>
+          <v-btn to="/new-patient" color="green" dark>New Patient</v-btn>
           <v-btn to="/new-doctor" color="blue" dark>New Doctor</v-btn>
           <v-btn @click="login" color="red" dark>Login</v-btn>
         </v-layout>
